@@ -5,20 +5,27 @@ class FaqController extends Controller{
 //  $faq = Faq::find('all');
 
 //return View::make('home',array('faq'=>$faq));
-$data['faq'] = DB::table('faqs')
+$ret = DB::table('faqs')
 ->get();
 
+$data = array();
+$data['faq'] = $ret;
 return View::make('home',$data);
 
   }
   public function show(){
     $name = Input::get('name');
     if($name){
-      $data = Faq::where(function($data) use ($name){
+      $ret = Faq::where(function($data) use ($name){
         $data->where('query_text','service_name','%'.$name.'%');
       })->get();
+      
+      $data = array();
+      $data['faq'] = $ret;
+      return View::make('home',$data);
+      
     //  return View::make('articles.create')->with('data',$data);
-      return View::make('articles.create',array('data'=>$data));
+    //  return View::make('articles.create',array('data'=>$data));
     }else{
       return View::make('home');
     }
